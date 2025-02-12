@@ -180,34 +180,57 @@ let postsProvider; // 전역 PostsProvider 인스턴스
  * @param {string} mode - 'normal' 또는 'recommend'
  */
 async function loadGalleryPosts(galleryId, page, mode = 'normal') {
+  // mode에 따라 기본 URL 생성 (기본적으로 mgallery를 사용)
   let url = `https://gall.dcinside.com/mgallery/board/lists/?id=${galleryId}&page=${page}`;
   if (mode === 'recommend') {
     url += '&exception_mode=recommend';
   }
-  const response = await axios.get(url, {
+  // fallback URL: mgallery를 제거한 URL (일반 갤러리용)
+  let fallbackUrl = `https://gall.dcinside.com/board/lists/?id=${galleryId}&page=${page}`;
+  if (mode === 'recommend') {
+    fallbackUrl += '&exception_mode=recommend';
+  }
+
+  // 최초 요청 (mgallery URL)
+  let response = await axios.get(url, {
     headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
   });
-  const html = response.data;
-  const $ = cheerio.load(html);
+  let html = response.data;
+  let $ = cheerio.load(html);
+
+  // 만약 리다이렉트 스크립트가 감지된다면,
+  // fallbackUrl (mgallery가 없는 URL)로 다시 요청합니다.
+  const scriptText = $('script').text();
+  if (scriptText.includes('location.replace')) {
+    console.log("리다이렉트 감지됨. fallbackUrl로 재요청:", fallbackUrl);
+    response = await axios.get(fallbackUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
+    });
+    html = response.data;
+    $ = cheerio.load(html);
+  }
+
+  // "다음 페이지" 버튼 존재 여부를 확인하여 hasMore 결정
   const hasMore = $('a.page_next').length > 0;
   let posts = [];
   const postElements = $('table.gall_list tbody.listwrap2 tr.ub-content.us-post');
   postElements.each((i, elem) => {
-	const title = $(elem).find('.gall_tit a').first().text().trim();
-	const linkPartial = $(elem).find('.gall_tit a').attr('href');
-	const replyCount = $(elem).find('.gall_tit .reply_numbox span').text();
-
-
-	const totalTitle = `${title}${replyCount}`
-	if (title && linkPartial && !linkPartial.startsWith('javascript')) {
-	  const link = linkPartial.startsWith('http')
-		? linkPartial
-		: `https://gall.dcinside.com${linkPartial}`;
-	  posts.push(new PostItem(totalTitle, link));
-	}
+    const title = $(elem).find('.gall_tit a').first().text().trim();
+    const linkPartial = $(elem).find('.gall_tit a').attr('href');
+    const replyCount = $(elem).find('.gall_tit .reply_numbox span').text();
+  
+  
+    const totalTitle = `${title}${replyCount}`
+    if (title && linkPartial && !linkPartial.startsWith('javascript')) {
+      const link = linkPartial.startsWith('http')
+      ? linkPartial
+      : `https://gall.dcinside.com${linkPartial}`;
+      posts.push(new PostItem(totalTitle, link));
+    }
   });
   return { posts, hasMore };
 }
+
 
 /**
  * unified 검색 명령어: 갤러리 ID를 옵션으로 제공하여 검색할 갤러리를 선택
