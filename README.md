@@ -1,7 +1,5 @@
-# DCinside Crawler
+# DCinside 연동 VScode 확장팩
 
-**버전:** 0.0.1  
-**Publisher:** your-publisher-id
 
 DCinside Crawler 확장팩은 디시인사이드 갤러리의 게시글을 VS Code 내에서 바로 검색하고 읽을 수 있도록 도와줍니다.  
 이 확장팩은 갤러리 게시글 목록을 사이드바 트리뷰로 제공하고, 선택한 게시글의 본문과 댓글을 Markdown 형식으로 변환하여 미리보기 창에서 보여줍니다.  
