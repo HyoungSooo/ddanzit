@@ -40,5 +40,5 @@ code --install-extension ddanzit-0.0.2.vsix
 ```
 설치가 안된다면 **ddanzit-0.0.2.vsix** 이 부분을 생성된 파일 이름으로 변경할 것
 
-
-
+### 실행 화면
+![](./resources/explane3.png)
