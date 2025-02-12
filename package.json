@@ -2,10 +2,10 @@
   "name": "ddanzit",
   "displayName": "ddanzit",
   "description": "회사에서 딴짓하기",
-  "publisher": "HyoungSooo",
-  "version": "0.0.2",
+  "publisher": "Hyoungsooo",
+  "version": "0.0.3",
   "engines": {
-    "vscode": "^1.97.0"
+    "vscode": ">=1.4.0 <2.0.0"
   },
   "repository": {
     "type": "git",

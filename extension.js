@@ -307,6 +307,16 @@ let openPostCommand = vscode.commands.registerCommand('dcinsideCrawler.openPost'
     });
     const postHtml = postResponse.data;
     const $$ = cheerio.load(postHtml);
+    // 1. input 태그에서 e_s_n_o 추출 (존재할 경우)
+    let e_s_n_o = $$('input[name="e_s_n_o"]').val();
+
+    console.log(e_s_n_o);
+
+    // e_s_n_o 값이 추출되었는지 확인
+    if (!e_s_n_o) {
+      // 값이 없으면 기본값을 사용하거나 오류 처리
+      e_s_n_o = 'default_value';
+    }
 
     let postContentHtml = $$('.writing_view_box .write_div').html() || '<p>본문을 찾을 수 없습니다.</p>';
     const content$ = cheerio.load(postContentHtml);
@@ -324,6 +334,9 @@ let openPostCommand = vscode.commands.registerCommand('dcinsideCrawler.openPost'
       return `![${alt}](${proxyUrl})`;
     });
 
+    // postHtml: 게시글 상세 페이지의 HTML (axios로 가져온 결과)
+
+
     const commentPayload = {
       id: galleryId,
       no: postNo,
@@ -331,7 +344,7 @@ let openPostCommand = vscode.commands.registerCommand('dcinsideCrawler.openPost'
       cmt_no: postNo,
       focus_cno: '',
       focus_pno: '',
-      e_s_n_o: '3eabc219ebdd65f1',
+      e_s_n_o: e_s_n_o,
       comment_page: '1',
       sort: '',
       prevCnt: '',
