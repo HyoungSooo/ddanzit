@@ -17,7 +17,7 @@ function asyncHandler(fn) {
 /**
  * Express 프록시 서버: 이미지 요청 시 올바른 헤더(Referer 등)를 추가하여 우회합니다.
  */
-function startProxyServer(port = 3000) {
+function startProxyServer(port = 25784) {
   const app = express();
 
   app.get(
@@ -320,7 +320,7 @@ let openPostCommand = vscode.commands.registerCommand('dcinsideCrawler.openPost'
     });
     let postContentMarkdown = turndownService.turndown(postContentHtml);
     postContentMarkdown = postContentMarkdown.replace(/!\[(.*?)\]\((https?:\/\/[^)]+)\)/g, (match, alt, url) => {
-      const proxyUrl = `http://localhost:3000/?url=${encodeURIComponent(url)}`;
+      const proxyUrl = `http://localhost:25784/?url=${encodeURIComponent(url)}`;
       return `![${alt}](${proxyUrl})`;
     });
 
@@ -395,7 +395,7 @@ let navigatePageCommand = vscode.commands.registerCommand('dcinsideCrawler.navig
 module.exports = {
   activate: function (context) {
     // 프록시 서버 시작
-    const proxyServer = startProxyServer(3000);
+    const proxyServer = startProxyServer(25784);
     context.subscriptions.push({ dispose: () => proxyServer.close() });
 
     postsProvider = new PostsProvider();
