@@ -23,3 +23,8 @@ DCinside Crawler 확장팩은 디시인사이드 갤러리의 게시글을 VS Co
   이미지 요청 시 `'Referer': 'https://gall.dcinside.com'` 등의 헤더를 추가하여 정상적으로 이미지를 불러올 수 있도록 합니다.
 
 ---
+
+### 마크다운 미리보기에 사진 안나올 때
+
+![](./resources/explane1.png)
+![](./resources/explane2.png)
