@@ -28,15 +28,8 @@ DCinside 연동 VScode 확장팩은 디시인사이드 갤러리의 게시글을
 ![](./resources/explane2.png)
 
 
-### 로컬설치
-**현재 vscode에 배포되지않아 로컬 설치로만 가능**
-
-```shell
-npm install -g vsce
-vsce package
-code --install-extension ddanzit-0.0.2.vsix
-```
-설치가 안된다면 **ddanzit-0.0.2.vsix** 이 부분을 생성된 파일 이름으로 변경할 것
+### 설치
+https://marketplace.visualstudio.com/manage/publishers/hyoungsooo
 
 ### 작동
 
